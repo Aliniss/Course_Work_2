@@ -2,6 +2,7 @@ from src.vacansy_api import HH
 from src.vacansy_filter import VacansyFilter
 from src.vacansy_list import VacansyList
 from src.vacansy_file import VacansyFile
+from config import DATA_DIR
 
 
 def main_func():
@@ -21,8 +22,14 @@ def main_func():
     )
 
     # Запрос ключевого слова для поиска.
-    print("По какому слову будем искать вакансии?")
+    print("По какому слову будем искать вакансии?" 
+          "Если хотите очистить список,то введите 1.")
     key_word_for_vacs = input("Введите слово для поиска вакансий здесь: ")
+    if key_word_for_vacs == "1":
+        deleter = VacansyFile(DATA_DIR)
+        deleter.del_data()
+        print("Данные удалены!")
+        return
     # Получение вакансий по ключевому слову с сервиса HH.
     hh_vacs = HH()
     hh_vacs.load_vacancies(key_word_for_vacs)

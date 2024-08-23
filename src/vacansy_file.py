@@ -25,6 +25,10 @@ class ReadWriteFile(ABC):
     def import_vacansy_list(self):
         pass
 
+    @abstractmethod
+    def del_data(self):
+        pass
+
 
 class VacansyFile(ReadWriteFile):
     """Класс работает с записью/чтением списка вакансий в файл, принимает/возвращает список вакансий.
@@ -32,7 +36,7 @@ class VacansyFile(ReadWriteFile):
 
     filename: str
 
-    def __init__(self, filename="vacansies.json"):
+    def __init__(self, filename=DATA_DIR):
         self.filename = filename
         self.fullname = os.path.join(DATA_DIR, filename)
         self.vacs_list = []
@@ -58,7 +62,7 @@ class VacansyFile(ReadWriteFile):
                         "link": item.link,
                     }
                 )
-            with open(self.fullname, "w", encoding="utf-8") as file:
+            with open(self.fullname, "a", encoding="utf-8") as file:
                 json.dump(temp_vac_list, file, ensure_ascii=False, indent=4)
             print("Файл успешно записан.")
         except Exception:
@@ -71,3 +75,9 @@ class VacansyFile(ReadWriteFile):
     def import_vacansy_list(self, new_list):
         """Метод принимает новый список объектов вакансий и заменяет им старый."""
         self.vacs_list = new_list
+
+    def del_data(self):
+        """ Удаление данных из файла """
+
+        with open(self.filename, "w", encoding="utf-8") as file:
+            json.dump([], file, ensure_ascii=False, indent=4)
